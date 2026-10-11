@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>CS2DROP - 官方正版饰品秒到账</title>
+    <style>
+        /* 核心暗黑赛博风格变量 */
+        :root {
+            --bg-color: #08090c;
+            --card-bg: #12161f;
+            --primary: #de9b35; /* 金色 */
+            --primary-hover: #ffb74d;
+            --text-main: #ffffff;
+            --text-muted: #626c7a;
+            --border-color: rgba(222, 155, 53, 0.15);
+            
+            --rarity-gold: #de9b35;
+            --rarity-red: #eb4b4b;
+            --rarity-pink: #d32ce6;
+            --rarity-purple: #8650ac;
+            --rarity-blue: #4b69ff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            overflow-x: hidden;
+            background-image: radial-gradient(circle at 50% 0%, #171d2a 0%, #08090c 80%);
+            padding-top: 70px;
+        }
+
+        /* 导航栏 */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 5%;
+            background: rgba(8, 9, 12, 0.95);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            width: 100%;
+            top: 0; left: 0;
+            z-index: 100;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: 900;
+            letter-spacing: 1px;
+            cursor: pointer;
+        }
+
+        .logo span {
+            color: var(--primary);
+            text-shadow: 0 0 10px rgba(222, 155, 53, 0.4);
+        }
+
+        nav.nav-desktop {
+            display: flex;
+            gap: 25px;
+        }
+
+        nav.nav-desktop a {
+            color: #9aa4b0;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 700;
+            transition: 0.3s;
+        }
+
+        nav.nav-desktop a:hover, nav.nav-desktop a.active {
+            color: var(--primary);
+        }
+
+        .auth-buttons .btn-steam {
+            background: linear-gradient(135deg, #101822 0%, #1b2838 100%);
+            border: 1px solid #c5a059;
+            color: var(--primary);
+            padding: 8px 18px;
+            border-radius: 4px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        /* 主视觉区 */
+        .hero {
+            text-align: center;
+            padding: 40px 20px 10px 20px;
+        }
+
+        .hero h1 {
+            font-size: 34px;
+            font-weight: 900;
+            margin-bottom: 10px;
+        }
+
+        .hero h1 span { color: var(--primary); }
+
+        .hero p {
+            color: #7d8b9e;
+            font-size: 14px;
+            max-width: 600px;
+            margin: 0 auto 30px auto;
+        }
+
+        /* 盲盒区域 */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 10px 20px 80px 20px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 800;
+            border-left: 4px solid var(--primary);
+            padding-left: 12px;
+            margin-bottom: 25px;
+        }
+
+        .case-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 15px;
+        }
+
+        .case-card {
+            background: var(--card-bg);
+            border: 1px solid rgba(255,255,255,0.03);
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            transition: 0.2s ease;
+            cursor: pointer;
+        }
+
+        .case-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-3px);
+        }
+
+        /* 纯前端CSS渐变皮肤容器，预防网络波动图片不显示 */
+        .skin-img-fallback {
+            width: 100%;
+            height: 100px;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, rgba(222,155,53,0.1) 0%, rgba(18,22,31,0.8) 100%);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+            color: var(--primary);
+            border: 1px dashed rgba(222,155,53,0.2);
+        }
+
+        .case-name {
+            font-size: 14px;
+            font-weight: 700;
+            color: #e2e8f0;
+            margin-bottom: 6px;
+        }
+
+        .case-price {
+            color: var(--primary);
+            font-weight: 800;
+            font-size: 16px;
+            margin-bottom: 12px;
+        }
+
+        /* 弹窗核心配置 */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(4, 5, 7, 0.96);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 15px;
+        }
+
+        .modal-content {
+            background: #0e121a;
+            width: 100%;
+            max-width: 500px;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 30px 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 15px; right: 20px;
+            font-size: 26px;
+            color: #555;
+            cursor: pointer;
+        }
+
+        /* 自适应简易型开箱滚轮 */
+        .roulette-container {
+            position: relative;
+            width: 100%;
+            height: 100px;
+            background: #07090d;
+            border: 1px solid rgba(255,255,255,0.05);
+            margin: 25px 0;
+            overflow: hidden;
+            border-radius: 6px;
+        }
+
+        .pointer {
+            position: absolute;
+            top: 0; left: 50%;
+            width: 2px; height: 100%;
+            background: #ff4b4b;
+            z-index: 10;
+            box-shadow: 0 0 8px #ff4b4b;
+        }
+
+        .roulette-track {
+            display: flex;
+            position: absolute;
+            left: 0; top: 0;
+            height: 100%;
+        }
+
+        .roulette-item {
+            min-width: 100px;
+            width: 100px;
+            height: 100%;
+            border-right: 1px solid rgba(255,255,255,0.02);
+            border-bottom: 4px solid var(--rarity-blue);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 5px;
+            background: rgba(255,255,255,0.01);
+        }
+
+        .roulette-item .mini-box {
+            width: 50px;
+            height: 40px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 4px;
+        }
+
+        .roulette-item p {
+            font-size: 9px;
+            margin-top: 5px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            width: 100%;
+            color: #9aa4b0;
+        }
+
+        /* 结果卡片 */
+        .result-display {
+            display: none;
+        }
+
+        .result-card {
+            background: rgba(255, 255, 255, 0.02);
+            display: inline-block;
+            padding: 20px 40px;
+            border-radius: 8px;
+            border-bottom: 5px solid #fff;
+            margin: 15px 0;
+        }
+
+        .modal-action-btns {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 15px;
+        }
+
+        @media (max-width: 768px) {
+            nav.nav-desktop { display: none; }
+            .hero h1 { font-size: 26px; }
+            .case-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo" onclick="location.reload()">CS2<span>DROP</span></div>
+        <nav class="nav-desktop">
+            <a href="#" class="active">盲盒开箱</a>
+            <a href="#" onclick="alert('功能筹备中')">开箱对战</a>
+            <a href="#" onclick="alert('功能筹备中')">幸运升级</a>
+            <a href="#" onclick="alert('功能筹备中')">积分商城</a>
+        </nav>
+        <div class="auth-buttons">
+            <button class="btn-steam" onclick="alert('正在调起快捷安全登录...')">快捷登录</button>
+        </div>
+    </header>
+
+    <section class="hero">
+        <h1>CS2 爆率天花板<span>饰品盲盒站</span></h1>
+        <p>全透明开箱掉落概率。新用户注册即可获得免费试抽福利！</p>
+    </section>
+
+    <main class="container">
+        <div class="section-title">官方精选盲盒箱</div>
+        <div class="case-grid">
+            
+            <div class="case-card" onclick="openCaseModal('变革武器箱', 16.00)">
+                <div class="skin-img-fallback">🎁 REVOLUTION</div>
+                <div class="case-name">变革武器箱</div>
+                <div class="case-price">¥ 16.00</div>
+                <button class="btn-open">立即开箱</button>
+            </div>
+
+            <div class="case-card" onclick="openCaseModal('反冲武器箱', 12.00)">
+                <div class="skin-img-fallback" style="color:var(--rarity-pink)">🎁 RECOIL</div>
+                <div class="case-name">反冲武器箱</div>
+                <div class="case-price">¥ 12.00</div>
+                <button class="btn-open">立即开箱</button>
+            </div>
+
+            <div class="case-card" onclick="openCaseModal('梦魇武器箱', 19.50)">
+                <div class="skin-img-fallback" style="color:var(--rarity-red)">🎁 NIGHTMARES</div>
+                <div class="case-name">梦魇武器箱</div>
+                <div class="case-price">¥ 19.50</div>
+                <button class="btn-open">立即开箱</button>
+            </div>
+
+            <div class="case-card" onclick="openCaseModal('蛇咬武器箱', 8.00)">
