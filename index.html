@@ -2,345 +2,397 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CS2DROP - 官方正版饰品秒到账</title>
     <style>
-        /* 核心暗黑赛博风格变量 */
         :root {
-            --bg-color: #08090c;
-            --card-bg: #12161f;
-            --primary: #de9b35; /* 金色 */
-            --primary-hover: #ffb74d;
-            --text-main: #ffffff;
-            --text-muted: #626c7a;
-            --border-color: rgba(222, 155, 53, 0.15);
-            
-            --rarity-gold: #de9b35;
-            --rarity-red: #eb4b4b;
-            --rarity-pink: #d32ce6;
-            --rarity-purple: #8650ac;
-            --rarity-blue: #4b69ff;
+            --bg-color: #0b0c10;
+            --panel-color: #1f2833;
+            --primary-color: #ff9f1c;
+            --text-color: #c5a880;
+            --text-light: #ffffff;
+            --accent-color: #45f3ff;
         }
 
         * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            -webkit-tap-highlight-color: transparent;
+            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
         }
 
         body {
             background-color: var(--bg-color);
-            color: var(--text-main);
-            overflow-x: hidden;
-            background-image: radial-gradient(circle at 50% 0%, #171d2a 0%, #08090c 80%);
-            padding-top: 70px;
+            color: var(--text-light);
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
         }
 
-        /* 导航栏 */
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 5%;
-            background: rgba(8, 9, 12, 0.95);
-            backdrop-filter: blur(10px);
-            position: fixed;
+        .container {
             width: 100%;
-            top: 0; left: 0;
-            z-index: 100;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            max-width: 480px;
+            background: linear-gradient(180deg, #131419 0%, #0b0c10 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            padding-bottom: 80px;
+            border-left: 1px solid #222;
+            border-right: 1px solid #222;
+        }
+
+        /* 头部样式 */
+        header {
+            padding: 20px 15px;
+            text-align: center;
+            border-bottom: 1px solid #1a1c23;
         }
 
         .logo {
-            font-size: 22px;
-            font-weight: 900;
-            letter-spacing: 1px;
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary-color);
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px rgba(255, 159, 28, 0.5);
+        }
+
+        .tagline {
+            font-size: 12px;
+            color: #888;
+            margin-top: 5px;
+        }
+
+        /* 促销 Banner 样式 */
+        .promo-banner {
+            margin: 15px;
+            background: linear-gradient(135deg, #1e1b4b 0%, #311042 100%);
+            border: 2px solid var(--primary-color);
+            border-radius: 12px;
+            padding: 15px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 15px rgba(255, 159, 28, 0.2);
             cursor: pointer;
         }
 
-        .logo span {
-            color: var(--primary);
-            text-shadow: 0 0 10px rgba(222, 155, 53, 0.4);
+        .promo-banner::before {
+            content: '限时福利';
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: var(--primary-color);
+            color: #000;
+            font-size: 11px;
+            font-weight: bold;
+            padding: 2px 10px;
+            border-bottom-left-radius: 8px;
         }
 
-        nav.nav-desktop {
-            display: flex;
-            gap: 25px;
-        }
-
-        nav.nav-desktop a {
-            color: #9aa4b0;
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: 700;
-            transition: 0.3s;
-        }
-
-        nav.nav-desktop a:hover, nav.nav-desktop a.active {
-            color: var(--primary);
-        }
-
-        .auth-buttons .btn-steam {
-            background: linear-gradient(135deg, #101822 0%, #1b2838 100%);
-            border: 1px solid #c5a059;
-            color: var(--primary);
-            padding: 8px 18px;
-            border-radius: 4px;
-            font-size: 13px;
-            font-weight: 700;
-            cursor: pointer;
-        }
-
-        /* 主视觉区 */
-        .hero {
-            text-align: center;
-            padding: 40px 20px 10px 20px;
-        }
-
-        .hero h1 {
-            font-size: 34px;
-            font-weight: 900;
-            margin-bottom: 10px;
-        }
-
-        .hero h1 span { color: var(--primary); }
-
-        .hero p {
-            color: #7d8b9e;
-            font-size: 14px;
-            max-width: 600px;
-            margin: 0 auto 30px auto;
-        }
-
-        /* 盲盒区域 */
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 10px 20px 80px 20px;
-        }
-
-        .section-title {
+        .promo-title {
             font-size: 18px;
             font-weight: 800;
-            border-left: 4px solid var(--primary);
-            padding-left: 12px;
-            margin-bottom: 25px;
-        }
-
-        .case-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-            gap: 15px;
-        }
-
-        .case-card {
-            background: var(--card-bg);
-            border: 1px solid rgba(255,255,255,0.03);
-            border-radius: 8px;
-            padding: 15px;
+            color: #fff;
             text-align: center;
-            transition: 0.2s ease;
-            cursor: pointer;
-        }
-
-        .case-card:hover {
-            border-color: var(--primary);
-            transform: translateY(-3px);
-        }
-
-        /* 纯前端CSS渐变皮肤容器，预防网络波动图片不显示 */
-        .skin-img-fallback {
-            width: 100%;
-            height: 100px;
-            margin-bottom: 10px;
-            background: linear-gradient(135deg, rgba(222,155,53,0.1) 0%, rgba(18,22,31,0.8) 100%);
-            border-radius: 6px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-            font-weight: bold;
-            color: var(--primary);
-            border: 1px dashed rgba(222,155,53,0.2);
-        }
-
-        .case-name {
-            font-size: 14px;
-            font-weight: 700;
-            color: #e2e8f0;
-            margin-bottom: 6px;
-        }
-
-        .case-price {
-            color: var(--primary);
-            font-weight: 800;
-            font-size: 16px;
             margin-bottom: 12px;
+            letter-spacing: 1px;
+            background: linear-gradient(90deg, #fff, var(--primary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
-        /* 弹窗核心配置 */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(4, 5, 7, 0.96);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-            padding: 15px;
+        .promo-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-bottom: 8px;
         }
 
-        .modal-content {
-            background: #0e121a;
-            width: 100%;
-            max-width: 500px;
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 30px 20px;
-            text-align: center;
-            position: relative;
-        }
-
-        .close-modal {
-            position: absolute;
-            top: 15px; right: 20px;
-            font-size: 26px;
-            color: #555;
-            cursor: pointer;
-        }
-
-        /* 自适应简易型开箱滚轮 */
-        .roulette-container {
-            position: relative;
-            width: 100%;
-            height: 100px;
-            background: #07090d;
-            border: 1px solid rgba(255,255,255,0.05);
-            margin: 25px 0;
-            overflow: hidden;
+        .promo-item {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 159, 28, 0.2);
             border-radius: 6px;
+            padding: 8px 4px;
+            text-align: center;
         }
 
-        .pointer {
-            position: absolute;
-            top: 0; left: 50%;
-            width: 2px; height: 100%;
-            background: #ff4b4b;
-            z-index: 10;
-            box-shadow: 0 0 8px #ff4b4b;
+        .promo-item.full-width {
+            grid-column: span 3;
+            background: rgba(255, 159, 28, 0.1);
+            border: 1px dashed var(--primary-color);
         }
 
-        .roulette-track {
+        .charge-txt {
+            font-size: 11px;
+            color: #aaa;
+            display: block;
+        }
+
+        .give-txt {
+            font-size: 14px;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-top: 2px;
+        }
+
+        .promo-item.full-width .give-txt {
+            color: #ff4d4d;
+            font-size: 16px;
+            text-shadow: 0 0 8px rgba(255, 77, 77, 0.4);
+        }
+
+        /* 核心利益钩子 */
+        .hook-box {
+            background: rgba(255, 159, 28, 0.05);
+            border-top: 1px solid rgba(255, 159, 28, 0.1);
+            border-bottom: 1px solid rgba(255, 159, 28, 0.1);
+            padding: 12px;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .hook-box h2 {
+            font-size: 16px;
+            color: var(--primary-color);
+            margin-bottom: 4px;
+        }
+
+        .hook-box p {
+            font-size: 13px;
+            color: #ddd;
+        }
+
+        /* 标签栏 */
+        .nav-tags {
             display: flex;
-            position: absolute;
-            left: 0; top: 0;
-            height: 100%;
+            justify-content: space-around;
+            padding: 0 15px;
+            margin-bottom: 20px;
         }
 
-        .roulette-item {
-            min-width: 100px;
-            width: 100px;
-            height: 100%;
-            border-right: 1px solid rgba(255,255,255,0.02);
-            border-bottom: 4px solid var(--rarity-blue);
+        .tag {
+            background: #1a1c23;
+            color: var(--text-color);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            border: 1px solid #2a2d38;
+        }
+
+        /* 武器箱区域 */
+        .section-title {
+            padding: 0 15px;
+            font-size: 15px;
+            color: #888;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .section-title::before {
+            content: '';
+            display: inline-block;
+            width: 3px;
+            height: 15px;
+            background: var(--primary-color);
+            margin-right: 8px;
+        }
+
+        .box-list {
+            padding: 0 15px;
             display: flex;
             flex-direction: column;
+            gap: 12px;
+        }
+
+        .box-card {
+            background: #16181f;
+            border: 1px solid #232631;
+            border-radius: 10px;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .box-card:hover {
+            border-color: var(--primary-color);
+            background: #1c1f29;
+        }
+
+        .box-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .box-icon {
+            font-size: 24px;
+            background: #202330;
+            width: 45px;
+            height: 45px;
+            display: flex;
             align-items: center;
             justify-content: center;
-            padding: 5px;
-            background: rgba(255,255,255,0.01);
-        }
-
-        .roulette-item .mini-box {
-            width: 50px;
-            height: 40px;
-            background: rgba(255,255,255,0.05);
-            border-radius: 4px;
-        }
-
-        .roulette-item p {
-            font-size: 9px;
-            margin-top: 5px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            width: 100%;
-            color: #9aa4b0;
-        }
-
-        /* 结果卡片 */
-        .result-display {
-            display: none;
-        }
-
-        .result-card {
-            background: rgba(255, 255, 255, 0.02);
-            display: inline-block;
-            padding: 20px 40px;
             border-radius: 8px;
-            border-bottom: 5px solid #fff;
-            margin: 15px 0;
+            border: 1px solid #2d3142;
         }
 
-        .modal-action-btns {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-            margin-top: 15px;
+        .box-name {
+            font-size: 15px;
+            font-weight: bold;
+            color: #fff;
         }
 
-        @media (max-width: 768px) {
-            nav.nav-desktop { display: none; }
-            .hero h1 { font-size: 26px; }
-            .case-grid { grid-template-columns: repeat(2, 1fr); }
+        .box-price {
+            font-size: 14px;
+            color: var(--primary-color);
+            margin-top: 4px;
+            font-weight: bold;
+        }
+
+        .btn-open {
+            background: linear-gradient(90deg, #ff7b00, #ff9f1c);
+            color: #000;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* 底部固定转化按钮 */
+        .footer-cta {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            max-width: 480px;
+            background: rgba(11, 12, 16, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 12px 15px;
+            border-top: 1px solid #222;
+            z-index: 100;
+        }
+
+        .btn-main {
+            width: 100%;
+            background: linear-gradient(90deg, #ff9f1c, #ff7b00);
+            color: #000;
+            border: none;
+            padding: 14px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(255, 159, 28, 0.4);
+            text-align: center;
+            text-decoration: none;
+            display: block;
         }
     </style>
 </head>
 <body>
 
-    <header>
-        <div class="logo" onclick="location.reload()">CS2<span>DROP</span></div>
-        <nav class="nav-desktop">
-            <a href="#" class="active">盲盒开箱</a>
-            <a href="#" onclick="alert('功能筹备中')">开箱对战</a>
-            <a href="#" onclick="alert('功能筹备中')">幸运升级</a>
-            <a href="#" onclick="alert('功能筹备中')">积分商城</a>
-        </nav>
-        <div class="auth-buttons">
-            <button class="btn-steam" onclick="alert('正在调起快捷安全登录...')">快捷登录</button>
+    <div class="container" onclick="redirectToOffer()">
+        <header>
+            <div class="logo">CS2 DROP</div>
+            <div class="tagline">官方正版饰品 · 秒到账</div>
+        </header>
+
+        <!-- 纯代码打造的高转化促销 Banner -->
+        <div class="promo-banner">
+            <div class="promo-title">🔥 充值限时特惠大满送 🔥</div>
+            <div class="promo-grid">
+                <div class="promo-item">
+                    <span class="charge-txt">充 50</span>
+                    <span class="give-txt">送 2</span>
+                </div>
+                <div class="promo-item">
+                    <span class="charge-txt">充 100</span>
+                    <span class="give-txt">送 5</span>
+                </div>
+                <div class="promo-item">
+                    <span class="charge-txt">充 200</span>
+                    <span class="give-txt">送 10</span>
+                </div>
+                <div class="promo-item">
+                    <span class="charge-txt">充 500</span>
+                    <span class="give-txt">送 20</span>
+                </div>
+                <div class="promo-item full-width">
+                    <span class="charge-txt">充 1000++ 尊享特惠</span>
+                    <span class="give-txt">⚡ 暴送 100 ⚡</span>
+                </div>
+            </div>
         </div>
-    </header>
 
-    <section class="hero">
-        <h1>CS2 爆率天花板<span>饰品盲盒站</span></h1>
-        <p>全透明开箱掉落概率。新用户注册即可获得免费试抽福利！</p>
-    </section>
+        <div class="hook-box">
+            <h2>CS2 爆率天花板 饰品盲盒站</h2>
+            <p>新用户注册即可获得免费试抽福利！</p>
+        </div>
 
-    <main class="container">
+        <div class="nav-tags">
+            <span class="tag">盲盒开箱</span>
+            <span class="tag">开箱对战</span>
+            <span class="tag">幸运升级</span>
+            <span class="tag">积分商城</span>
+        </div>
+
         <div class="section-title">官方精选盲盒箱</div>
-        <div class="case-grid">
-            
-            <div class="case-card" onclick="openCaseModal('变革武器箱', 16.00)">
-                <div class="skin-img-fallback">🎁 REVOLUTION</div>
-                <div class="case-name">变革武器箱</div>
-                <div class="case-price">¥ 16.00</div>
+
+        <div class="box-list">
+            <!-- 武器箱 1 -->
+            <div class="box-card">
+                <div class="box-info">
+                    <div class="box-icon">🎁</div>
+                    <div>
+                        <div class="box-name">REVOLUTION 变革武器箱</div>
+                        <div class="box-price">¥ 16.00</div>
+                    </div>
+                </div>
                 <button class="btn-open">立即开箱</button>
             </div>
 
-            <div class="case-card" onclick="openCaseModal('反冲武器箱', 12.00)">
-                <div class="skin-img-fallback" style="color:var(--rarity-pink)">🎁 RECOIL</div>
-                <div class="case-name">反冲武器箱</div>
-                <div class="case-price">¥ 12.00</div>
+            <!-- 武器箱 2 -->
+            <div class="box-card">
+                <div class="box-info">
+                    <div class="box-icon">🎁</div>
+                    <div>
+                        <div class="box-name">RECOIL 反冲武器箱</div>
+                        <div class="box-price">¥ 12.00</div>
+                    </div>
+                </div>
                 <button class="btn-open">立即开箱</button>
             </div>
 
-            <div class="case-card" onclick="openCaseModal('梦魇武器箱', 19.50)">
-                <div class="skin-img-fallback" style="color:var(--rarity-red)">🎁 NIGHTMARES</div>
-                <div class="case-name">梦魇武器箱</div>
-                <div class="case-price">¥ 19.50</div>
+            <!-- 武器箱 3 -->
+            <div class="box-card">
+                <div class="box-info">
+                    <div class="box-icon">🎁</div>
+                    <div>
+                        <div class="box-name">NIGHTMARES 梦魇武器箱</div>
+                        <div class="box-price">¥ 19.50</div>
+                    </div>
+                </div>
                 <button class="btn-open">立即开箱</button>
             </div>
+        </div>
 
-            <div class="case-card" onclick="openCaseModal('蛇咬武器箱', 8.00)">
+        <div class="footer-cta">
+            <a href="javascript:void(0);" class="btn-main">快捷登录 / 领取免费开箱福利</a>
+        </div>
+    </div>
+
+    <script>
+        function redirectToOffer() {
+            // 在此替换为您真实的引流链接/加粉链接/跳转渠道
+            const TARGET_URL = "YOUR_CONVERSION_URL_HERE"; 
+            window.location.href = TARGET_URL;
+        }
+    </script>
+</body>
+</html>
